@@ -1,0 +1,26 @@
+.button {
+  padding: 12px 16px;
+  border: none;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.blue {
+    background-color: #547aff;
+    color: #fff;
+
+    &:hover {
+      background-color: #4067d3;
+    }
+  }
+
+  &.gray {
+    background-color: #cccccc;
+    color: #fff;
+
+    &:hover {
+      background-color: #aaaaaa;
+    }
+  }
+}

@@ -25,13 +25,28 @@ export async function addNewTask(data: ITodoTask) {
 }
 
 export async function updateTask(data: ITodoTask) {
+  if (data._id) {
+    const dataSend = JSON.parse(JSON.stringify(data));
+    delete dataSend._id;
+    const resp = await fetch(`${backendDomain()}/api/v1/tasks/${data._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataSend),
+    });
+    if (!resp.ok) {
+      throw new Error("Failed to update Todo task");
+    }
+    return resp.json();
+  }
+}
+
+export async function deleteAllTasks() {
   const resp = await fetch(`${backendDomain()}/api/v1/tasks`, {
-    method: "PUT",
+    method: "DELETE",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
   });
   if (!resp.ok) {
-    throw new Error("Failed to add new Todo task");
+    throw new Error("Failed to delete tasks");
   }
   return resp.json();
 }

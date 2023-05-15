@@ -1,4 +1,4 @@
-import { ITextButton } from "@/@types/text.button.type";
+import { ITextButton } from "@/@types/components/text.button.type";
 import styles from "./TextButton.module.scss";
 
 export default function TextButton(props: ITextButton) {

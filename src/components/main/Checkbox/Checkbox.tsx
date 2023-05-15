@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Checkbox.module.scss";
-import { ICheckbox } from "@/@types/checkbox.type";
+import { ICheckbox } from "@/@types/components/checkbox.type";
 
 function Checkbox(props: ICheckbox) {
   const { label, checked, onChange, disabled } = props;

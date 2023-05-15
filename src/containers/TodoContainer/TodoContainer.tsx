@@ -5,8 +5,15 @@ import styles from "./TodoContainer.module.scss";
 import TextButton from "@/components/main/TextButton/TextButton";
 import TodoColumn from "@/components/layout/TodoGrid/TodoColumn";
 import { ITodoTask } from "@/@types/todo.task.type";
-import { addNewTask, getAllTasks, updateTask } from "@/services/task.service";
-import { TaskDoneType } from "@/@types/todo.column.type";
+import {
+  addNewTask,
+  deleteAllTasks,
+  getAllTasks,
+  updateTask,
+} from "@/services/task.service";
+import { TaskDoneType } from "@/@types/components/todo.column.type";
+import ConfirmationModal from "@/components/layout/modal/ConfirmationModal";
+import Button from "@/components/main/Button/Button";
 
 const TodoContainer = () => {
   const [todos, setTodos] = useState<ITodoTask[]>([]);
@@ -14,6 +21,7 @@ const TodoContainer = () => {
   const [newTodo, setNewTodo] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isShowModal, setIsShowModal] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchTasks() {
@@ -43,7 +51,10 @@ const TodoContainer = () => {
     fetchTasks();
   }, []);
 
-  const handleDeleteAll = () => {};
+  const handleDeleteAll = async () => {
+    console.log("clicked delete all");
+    setIsShowModal(true);
+  };
 
   const handleNewTodoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(event.target.value);
@@ -122,6 +133,22 @@ const TodoContainer = () => {
     }
   };
 
+  const onDeleteConfirm = async () => {
+    try {
+      const resp = await deleteAllTasks();
+      if (resp?.success) {
+        setTodos([]);
+        setDoneTodos([]);
+      }
+    } catch (err) {
+      // Show message
+    }
+  };
+
+  const onDeleteCancel = () => {
+    setIsShowModal(false);
+  };
+
   return (
     <div>
       <div className={styles["todo-container"]}>
@@ -137,7 +164,7 @@ const TodoContainer = () => {
               value={newTodo}
               onChange={handleNewTodoChange}
             />
-            <button onClick={handleAddTodo}>Add</button>
+            <Button onClick={handleAddTodo}>Add</Button>
           </div>
 
           <input
@@ -166,6 +193,13 @@ const TodoContainer = () => {
             </div>
           </div>
         )}
+        <ConfirmationModal
+          isOpen={isShowModal}
+          onConfirm={onDeleteConfirm}
+          onCancel={onDeleteCancel}
+        >
+          <span>Do you want to delete all tasks ?</span>
+        </ConfirmationModal>
       </div>
     </div>
   );

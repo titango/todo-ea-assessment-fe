@@ -1,4 +1,4 @@
-import { ITodoColumn } from "@/@types/todo.column.type";
+import { ITodoColumn } from "@/@types/components/todo.column.type";
 import styles from "./TodoColumn.module.scss";
 import Checkbox from "@/components/main/Checkbox/Checkbox";
 

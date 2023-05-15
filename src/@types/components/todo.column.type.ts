@@ -1,4 +1,4 @@
-import { ITodoTask } from "./todo.task.type";
+import { ITodoTask } from "../todo.task.type";
 
 export type TaskDoneType = "done" | "undone";
 export interface ITodoColumn {
