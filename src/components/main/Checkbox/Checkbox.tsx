@@ -13,7 +13,7 @@ function Checkbox(props: ICheckbox) {
         disabled={disabled}
       />
       <span className={styles.checkmark}></span>
-      {label}
+      <span className={styles.label}>{label}</span>
     </label>
   );
 }

@@ -22,7 +22,7 @@ export default function TodoColumn(props: ITodoColumn) {
                 <Checkbox
                   checked={task.isCompleted}
                   onChange={onChange}
-                  label="task.title"
+                  label={task.title}
                 />
               </div>
             );
