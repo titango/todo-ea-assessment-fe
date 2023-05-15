@@ -1,30 +1,27 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./TodoContainer.module.scss";
 import TextButton from "@/components/main/TextButton/TextButton";
 import TodoColumn from "@/components/layout/TodoGrid/TodoColumn";
 import { ITodoTask } from "@/@types/todo.task.type";
+import { backendDomain } from "@/helpers/domain";
+import { addNewTask, getAllTasks } from "@/services/task.service";
 
 const TodoContainer = () => {
-  const [todos, setTodos] = useState<ITodoTask[]>([
-    {
-      id: "1",
-      title: "A",
-      isCompleted: false,
-    },
-    { id: "2", title: "B", isCompleted: true },
-  ]);
-  const [doneTodos, setDoneTodos] = useState<ITodoTask[]>([
-    {
-      id: "1",
-      title: "A",
-      isCompleted: true,
-    },
-    { id: "2", title: "B", isCompleted: true },
-  ]);
+  const [todos, setTodos] = useState<ITodoTask[]>([]);
+  const [doneTodos, setDoneTodos] = useState<ITodoTask[]>([]);
   const [newTodo, setNewTodo] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    async function fetchTasks() {
+      const resp = await getAllTasks();
+      console.log("all tasks: ", resp);
+      setTodos(resp);
+    }
+    fetchTasks();
+  }, []);
 
   const handleDeleteAll = () => {};
 
@@ -32,7 +29,28 @@ const TodoContainer = () => {
     setNewTodo(event.target.value);
   };
 
-  const handleAddTodo = (event: React.MouseEvent<HTMLButtonElement>) => {};
+  const handleAddTodo = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (newTodo) {
+      const data = {
+        title: newTodo,
+        isCompleted: false,
+      };
+      try {
+        const resp: ITodoTask = await addNewTask(data);
+        console.log("resp: ", resp);
+        if (resp && resp._id) {
+          const cloneTodo = [...todos];
+          const indInsert = cloneTodo.findIndex(
+            (todo) => todo.title > resp.title
+          );
+          cloneTodo.splice(indInsert, 0, resp);
+          setTodos(cloneTodo);
+        }
+      } catch (err: unknown) {
+        // Could show error message
+      }
+    }
+  };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);

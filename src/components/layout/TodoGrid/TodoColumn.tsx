@@ -15,10 +15,10 @@ export default function TodoColumn(props: ITodoColumn) {
         <span>{title}</span>
       </div>
       <div className={styles.tasks}>
-        {tasks.length &&
+        {tasks.length > 0 &&
           tasks.map((task) => {
             return (
-              <div key={task.id} className={styles.task}>
+              <div key={task._id} className={styles.task}>
                 <Checkbox
                   checked={task.isCompleted}
                   onChange={onChange}

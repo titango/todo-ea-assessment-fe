@@ -1,5 +1,5 @@
 export interface ITodoTask {
-  id: string;
+  _id?: string;
   title: string;
   isCompleted: boolean;
 }
