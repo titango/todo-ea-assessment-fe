@@ -1,0 +1,18 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  .title {
+    font-size: 25px;
+    padding-left: 20px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #000;
+  }
+
+  .tasks {
+    margin-top: 1rem;
+    .task {
+      display: flex;
+      gap: 10px;
+    }
+  }
+}

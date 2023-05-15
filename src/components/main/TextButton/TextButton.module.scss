@@ -1,0 +1,12 @@
+.text-button {
+  color: #c63939;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: 0;
+  background-color: transparent;
+  border: none;
+
+  &:hover {
+    color: #a23333;
+  }
+}
