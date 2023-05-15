@@ -23,3 +23,15 @@ export async function addNewTask(data: ITodoTask) {
   }
   return resp.json();
 }
+
+export async function updateTask(data: ITodoTask) {
+  const resp = await fetch(`${backendDomain()}/api/v1/tasks`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!resp.ok) {
+    throw new Error("Failed to add new Todo task");
+  }
+  return resp.json();
+}

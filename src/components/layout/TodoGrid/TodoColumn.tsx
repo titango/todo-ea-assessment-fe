@@ -3,11 +3,7 @@ import styles from "./TodoColumn.module.scss";
 import Checkbox from "@/components/main/Checkbox/Checkbox";
 
 export default function TodoColumn(props: ITodoColumn) {
-  const { title, tasks } = props;
-
-  const onChange = () => {
-    console.log("clicked");
-  };
+  const { title, tasks, onTaskDoneChecked } = props;
 
   return (
     <div className={styles.body}>
@@ -21,7 +17,7 @@ export default function TodoColumn(props: ITodoColumn) {
               <div key={task._id} className={styles.task}>
                 <Checkbox
                   checked={task.isCompleted}
-                  onChange={onChange}
+                  onChange={(event) => onTaskDoneChecked(event, task)}
                   label={task.title}
                 />
               </div>

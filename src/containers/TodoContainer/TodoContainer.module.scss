@@ -96,7 +96,8 @@
 
   .todo-tasks {
     display: flex;
-
+    gap: 1rem;
+    
     .column {
       flex: 1;
     }
