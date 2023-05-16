@@ -14,7 +14,6 @@ import {
   searchTasks,
   updateTask,
 } from "@/services/task.service";
-import { TaskDoneType } from "@/@types/components/todo.column.type";
 import ConfirmationModal from "@/components/layout/modal/ConfirmationModal";
 import Button from "@/components/main/Button/Button";
 import { useDebounce } from "@/helpers/useDebounce";
@@ -34,26 +33,34 @@ const TodoContainer = () => {
   useEffect(() => {
     async function fetchTasks() {
       setIsLoading(true);
-      const resp: ITodoTask[] = await getAllTasks();
-      setIsLoading(false);
+      try {
+        const resp: ITodoTask[] = await getAllTasks();
+        setIsLoading(false);
 
-      const splitArrays = extractTodoTasks(resp);
+        const splitArrays = extractTodoTasks(resp);
 
-      setInitSearch(true);
-      setTodos(splitArrays.incomplete);
-      setDoneTodos(splitArrays.completed);
+        setInitSearch(true);
+        setTodos(splitArrays.incomplete);
+        setDoneTodos(splitArrays.completed);
+      } catch (err) {
+        // Show error
+      }
     }
     fetchTasks();
   }, []);
 
   useEffect(() => {
     async function searchAllTasks() {
-      let resp;
-      if (debouncedQuery === "") resp = await getAllTasks();
-      else resp = await searchTasks(debouncedQuery);
-      const splitArrays = extractTodoTasks(resp);
-      setTodos(splitArrays.incomplete);
-      setDoneTodos(splitArrays.completed);
+      try {
+        let resp;
+        if (debouncedQuery === "") resp = await getAllTasks();
+        else resp = await searchTasks(debouncedQuery);
+        const splitArrays = extractTodoTasks(resp);
+        setTodos(splitArrays.incomplete);
+        setDoneTodos(splitArrays.completed);
+      } catch (err) {
+        // Show error
+      }
     }
     if (initSearch) searchAllTasks();
   }, [debouncedQuery]);
@@ -108,34 +115,38 @@ const TodoContainer = () => {
         ...task,
         isCompleted: checked,
       };
-      const resp = await updateTask(updatedTask);
-      console.log("resp updated: ", resp);
-      if (resp && resp._id) {
-        let originalList, newList;
-        if (resp.isCompleted) {
-          originalList = [...todos];
-          newList = [...doneTodos];
-        } else {
-          originalList = [...doneTodos];
-          newList = [...todos];
-        }
-        const index = newList.findIndex(
-          (todo) => todo.title.localeCompare(resp.title) === 1
-        );
-        const insertIndex = index === -1 ? newList.length : index;
-        newList.splice(insertIndex, 0, resp);
-        const indOriginal = originalList.findIndex(
-          (todo) => todo._id === resp._id
-        );
-        if (indOriginal >= 0) originalList.splice(indOriginal, 1);
+      try {
+        const resp = await updateTask(updatedTask);
+        console.log("resp updated: ", resp);
+        if (resp && resp._id) {
+          let originalList, newList;
+          if (resp.isCompleted) {
+            originalList = [...todos];
+            newList = [...doneTodos];
+          } else {
+            originalList = [...doneTodos];
+            newList = [...todos];
+          }
+          const index = newList.findIndex(
+            (todo) => todo.title.localeCompare(resp.title) === 1
+          );
+          const insertIndex = index === -1 ? newList.length : index;
+          newList.splice(insertIndex, 0, resp);
+          const indOriginal = originalList.findIndex(
+            (todo) => todo._id === resp._id
+          );
+          if (indOriginal >= 0) originalList.splice(indOriginal, 1);
 
-        if (resp.isCompleted) {
-          setTodos(originalList);
-          setDoneTodos(newList);
-        } else {
-          setTodos(newList);
-          setDoneTodos(originalList);
+          if (resp.isCompleted) {
+            setTodos(originalList);
+            setDoneTodos(newList);
+          } else {
+            setTodos(newList);
+            setDoneTodos(originalList);
+          }
         }
+      } catch (err) {
+        // Show error
       }
     }
   };
@@ -163,39 +174,51 @@ const TodoContainer = () => {
     };
     if (text !== "") {
       // Update
-      const resp = await updateTask(updatedTask);
-      if (resp && resp._id) {
-        const cloneTodo = [...todos];
-        const taskTodo = cloneTodo.find((task) => task._id === resp._id);
-        if (taskTodo) {
-          taskTodo.title = resp.title;
-          setTodos(cloneTodo);
-        } else {
-          const cloneDoneTodos = [...doneTodos];
-          const taskTodo = cloneDoneTodos.find((task) => task._id === resp._id);
+      try {
+        const resp = await updateTask(updatedTask);
+        if (resp && resp._id) {
+          const cloneTodo = [...todos];
+          const taskTodo = cloneTodo.find((task) => task._id === resp._id);
           if (taskTodo) {
             taskTodo.title = resp.title;
-            setDoneTodos(cloneDoneTodos);
+            setTodos(cloneTodo);
+          } else {
+            const cloneDoneTodos = [...doneTodos];
+            const taskTodo = cloneDoneTodos.find(
+              (task) => task._id === resp._id
+            );
+            if (taskTodo) {
+              taskTodo.title = resp.title;
+              setDoneTodos(cloneDoneTodos);
+            }
           }
         }
+      } catch (err) {
+        // Show error
       }
     } else {
       // Delete
-      const resp = await deleteTask(task._id || "");
-      if (resp) {
-        const cloneTodo = [...todos];
-        const ind = cloneTodo.findIndex((task) => task._id === resp._id);
-        if (ind > -1) {
-          cloneTodo.splice(ind, 1);
-          setTodos(cloneTodo);
-        } else {
-          const cloneDoneTodos = [...doneTodos];
-          const ind = cloneDoneTodos.findIndex((task) => task._id === resp._id);
+      try {
+        const resp = await deleteTask(task._id || "");
+        if (resp) {
+          const cloneTodo = [...todos];
+          const ind = cloneTodo.findIndex((task) => task._id === resp._id);
           if (ind > -1) {
-            cloneDoneTodos.splice(ind, 1);
-            setDoneTodos(cloneDoneTodos);
+            cloneTodo.splice(ind, 1);
+            setTodos(cloneTodo);
+          } else {
+            const cloneDoneTodos = [...doneTodos];
+            const ind = cloneDoneTodos.findIndex(
+              (task) => task._id === resp._id
+            );
+            if (ind > -1) {
+              cloneDoneTodos.splice(ind, 1);
+              setDoneTodos(cloneDoneTodos);
+            }
           }
         }
+      } catch (err) {
+        // Show error
       }
     }
   };

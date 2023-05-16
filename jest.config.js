@@ -8,6 +8,7 @@ module.exports = {
       useESM: true,
     }]
   },
+  setupFiles: ['dotenv/config'],
   setupFilesAfterEnv: ['./src/jest.setup.js'],
   // roots: [
   //   '<rootDir>/src'

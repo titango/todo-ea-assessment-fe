@@ -6,13 +6,8 @@ interface IFilteredTasks {
 }
 
 export function extractTodoTasks(tasks: ITodoTask[]): IFilteredTasks {
-  const arraysComplete = {
-    completed: [] as ITodoTask[],
-    incomplete: [] as ITodoTask[],
-  };
-
-  const splitArrays: typeof arraysComplete = tasks.reduce(
-    (result: typeof arraysComplete, obj: ITodoTask) => {
+  const splitArrays: IFilteredTasks = tasks.reduce(
+    (result: IFilteredTasks, obj: ITodoTask) => {
       if (obj.isCompleted) {
         result.completed.push(obj);
       } else {
