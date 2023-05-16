@@ -13,7 +13,7 @@ const nextConfig = {
     config.plugins.push(
       new Dotenv({
         path: `./.env.${
-          process.env.NODE_ENV === "production" ? "production" : "development"
+          process.env.NODE_ENV === "production" ? "production" : "local"
         }`,
       })
     )
