@@ -1,8 +1,8 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import React from "react";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
+import "setimmediate";
 
 import TodoContainer from "@/containers/TodoContainer/TodoContainer";
 import { backendDomain } from "@/helpers/domain";
