@@ -18,6 +18,7 @@ import ConfirmationModal from "@/components/layout/modal/ConfirmationModal";
 import Button from "@/components/main/Button/Button";
 import { useDebounce } from "@/helpers/useDebounce";
 import { extractTodoTasks } from "./helpers/task.filter";
+import useSocketTaskUpdated from "@/helpers/useSocketTaskUpdated";
 
 const TodoContainer = () => {
   const [todos, setTodos] = useState<ITodoTask[]>([]);
@@ -29,6 +30,9 @@ const TodoContainer = () => {
   const [initSearch, setInitSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedQuery = useDebounce(searchTerm, 500);
+
+  // Socket
+  const { tasksSocketUpdated } = useSocketTaskUpdated();
 
   useEffect(() => {
     async function fetchTasks() {
@@ -64,6 +68,14 @@ const TodoContainer = () => {
     }
     if (initSearch) searchAllTasks();
   }, [debouncedQuery]);
+
+  useEffect(() => {
+    if (tasksSocketUpdated) {
+      const splitArrays = extractTodoTasks(tasksSocketUpdated);
+      setTodos(splitArrays.incomplete);
+      setDoneTodos(splitArrays.completed);
+    }
+  }, [tasksSocketUpdated]);
 
   const handleDeleteAll = async () => {
     console.log("clicked delete all");
