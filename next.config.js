@@ -2,7 +2,7 @@
 const path = require('path');
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   output: 'standalone',
   sassOptions: {
     includePaths: [path.join(__dirname, 'src/styles')],

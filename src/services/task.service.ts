@@ -50,3 +50,17 @@ export async function deleteAllTasks() {
   }
   return resp.json();
 }
+
+export async function searchTasks(title: string) {
+  const resp = await fetch(
+    `${backendDomain()}/api/v1/tasks/search?q=${title}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+  if (!resp.ok) {
+    throw new Error("Failed to search tasks");
+  }
+  return resp.json();
+}

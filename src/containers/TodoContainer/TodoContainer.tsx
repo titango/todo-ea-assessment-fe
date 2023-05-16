@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from "react";
 
@@ -9,47 +10,52 @@ import {
   addNewTask,
   deleteAllTasks,
   getAllTasks,
+  searchTasks,
   updateTask,
 } from "@/services/task.service";
 import { TaskDoneType } from "@/@types/components/todo.column.type";
 import ConfirmationModal from "@/components/layout/modal/ConfirmationModal";
 import Button from "@/components/main/Button/Button";
+import { useDebounce } from "@/helpers/useDebounce";
+import { extractTodoTasks } from "./helpers/task.filter";
 
 const TodoContainer = () => {
   const [todos, setTodos] = useState<ITodoTask[]>([]);
   const [doneTodos, setDoneTodos] = useState<ITodoTask[]>([]);
   const [newTodo, setNewTodo] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
+
+  const [initSearch, setInitSearch] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedQuery = useDebounce(searchTerm, 500);
 
   useEffect(() => {
     async function fetchTasks() {
       setIsLoading(true);
-      const resp = await getAllTasks();
+      const resp: ITodoTask[] = await getAllTasks();
       setIsLoading(false);
 
-      const arraysComplete = {
-        completed: [] as ITodoTask[],
-        incomplete: [] as ITodoTask[],
-      };
+      const splitArrays = extractTodoTasks(resp);
 
-      const splitArrays: typeof arraysComplete = resp.reduce(
-        (result: typeof arraysComplete, obj: ITodoTask) => {
-          if (obj.isCompleted) {
-            result.completed.push(obj);
-          } else {
-            result.incomplete.push(obj);
-          }
-          return result;
-        },
-        { completed: [], incomplete: [] }
-      );
+      setInitSearch(true);
       setTodos(splitArrays.incomplete);
       setDoneTodos(splitArrays.completed);
     }
     fetchTasks();
   }, []);
+
+  useEffect(() => {
+    async function searchAllTasks() {
+      let resp;
+      if (debouncedQuery === "") resp = await getAllTasks();
+      else resp = await searchTasks(debouncedQuery);
+      const splitArrays = extractTodoTasks(resp);
+      setTodos(splitArrays.incomplete);
+      setDoneTodos(splitArrays.completed);
+    }
+    if (initSearch) searchAllTasks();
+  }, [debouncedQuery]);
 
   const handleDeleteAll = async () => {
     console.log("clicked delete all");
