@@ -7,19 +7,17 @@ import { rest } from "msw";
 import TodoContainer from "@/containers/TodoContainer/TodoContainer";
 import { backendDomain } from "@/helpers/domain";
 
+const taskValue = {
+  _id: "6462f91b9ad3dc04af1b07f6",
+  title: "First",
+  isCompleted: false,
+  createdAt: "2023-05-16T03:31:39.831Z",
+  updatedAt: "2023-05-16T03:31:39.831Z",
+};
+
 const server = setupServer(
   rest.get(`${backendDomain()}/api/v1/tasks`, (req, res, ctx) => {
-    return res(
-      ctx.json([
-        {
-          _id: "6462f91b9ad3dc04af1b07f6",
-          title: "First",
-          isCompleted: false,
-          createdAt: "2023-05-16T03:31:39.831Z",
-          updatedAt: "2023-05-16T03:31:39.831Z",
-        },
-      ])
-    );
+    return res(ctx.json([taskValue]));
   }),
   rest.post(`${backendDomain()}/api/v1/tasks`, (req, res, ctx) => {
     return res(
