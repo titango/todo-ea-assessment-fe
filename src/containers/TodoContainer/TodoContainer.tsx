@@ -239,7 +239,7 @@ const TodoContainer = () => {
             <div className={styles.column}>
               <TodoColumn
                 title="Done"
-                tasks={doneTodos}
+                tasks={doneTodos.slice(0, 10)}
                 onTaskDoneChecked={(event, task) => handleTaskDone(event, task)}
                 onEditText={onEditText}
               />

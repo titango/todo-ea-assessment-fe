@@ -6,4 +6,5 @@ export interface IButton {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   children: ReactNode;
   color?: ButtonColorType;
+  ariaLabel?: string;
 }

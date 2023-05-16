@@ -32,10 +32,12 @@ const ConfirmationModal = (props: IConfirmationModal) => {
             </span>
             {children}
             <div className={styles.buttons}>
-              <Button onClick={handleCancel} color="gray">
+              <Button onClick={handleCancel} color="gray" ariaLabel="cancel">
                 Cancel
               </Button>
-              <Button onClick={handleConfirm}>Confirm</Button>
+              <Button onClick={handleConfirm} ariaLabel="confirm">
+                Confirm
+              </Button>
             </div>
           </div>
         </div>
