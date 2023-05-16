@@ -40,6 +40,19 @@ export async function updateTask(data: ITodoTask) {
   }
 }
 
+export async function deleteTask(id: string) {
+  if (id) {
+    const resp = await fetch(`${backendDomain()}/api/v1/tasks/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!resp.ok) {
+      throw new Error("Failed to delete single Todo task");
+    }
+    return resp.json();
+  }
+}
+
 export async function deleteAllTasks() {
   const resp = await fetch(`${backendDomain()}/api/v1/tasks`, {
     method: "DELETE",

@@ -3,4 +3,5 @@ export interface ICheckbox {
   checked: boolean;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   disabled?: boolean;
+  onEditText?: (text: string) => void;
 }

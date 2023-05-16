@@ -9,6 +9,7 @@ import { ITodoTask } from "@/@types/todo.task.type";
 import {
   addNewTask,
   deleteAllTasks,
+  deleteTask,
   getAllTasks,
   searchTasks,
   updateTask,
@@ -155,6 +156,50 @@ const TodoContainer = () => {
     setIsShowModal(false);
   };
 
+  const onEditText = async (task: ITodoTask, text: string) => {
+    const updatedTask: ITodoTask = {
+      ...task,
+      title: text,
+    };
+    if (text !== "") {
+      // Update
+      const resp = await updateTask(updatedTask);
+      if (resp && resp._id) {
+        const cloneTodo = [...todos];
+        const taskTodo = cloneTodo.find((task) => task._id === resp._id);
+        if (taskTodo) {
+          taskTodo.title = resp.title;
+          setTodos(cloneTodo);
+        } else {
+          const cloneDoneTodos = [...doneTodos];
+          const taskTodo = cloneDoneTodos.find((task) => task._id === resp._id);
+          if (taskTodo) {
+            taskTodo.title = resp.title;
+            setDoneTodos(cloneDoneTodos);
+          }
+        }
+      }
+    } else {
+      // Delete
+      const resp = await deleteTask(task._id || "");
+      if (resp) {
+        const cloneTodo = [...todos];
+        const ind = cloneTodo.findIndex((task) => task._id === resp._id);
+        if (ind > -1) {
+          cloneTodo.splice(ind, 1);
+          setTodos(cloneTodo);
+        } else {
+          const cloneDoneTodos = [...doneTodos];
+          const ind = cloneDoneTodos.findIndex((task) => task._id === resp._id);
+          if (ind > -1) {
+            cloneDoneTodos.splice(ind, 1);
+            setDoneTodos(cloneDoneTodos);
+          }
+        }
+      }
+    }
+  };
+
   return (
     <div>
       <div className={styles["todo-container"]}>
@@ -188,6 +233,7 @@ const TodoContainer = () => {
                 title="To do"
                 tasks={todos}
                 onTaskDoneChecked={(event, task) => handleTaskDone(event, task)}
+                onEditText={onEditText}
               />
             </div>
             <div className={styles.column}>
@@ -195,6 +241,7 @@ const TodoContainer = () => {
                 title="Done"
                 tasks={doneTodos}
                 onTaskDoneChecked={(event, task) => handleTaskDone(event, task)}
+                onEditText={onEditText}
               />
             </div>
           </div>

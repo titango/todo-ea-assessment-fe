@@ -8,4 +8,5 @@ export interface ITodoColumn {
     event: React.ChangeEvent<HTMLInputElement>,
     task: ITodoTask
   ) => void;
+  onEditText?: (task: ITodoTask, text: string) => void;
 }

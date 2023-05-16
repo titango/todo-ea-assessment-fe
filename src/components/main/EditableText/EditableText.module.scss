@@ -1,0 +1,15 @@
+.editable-text {
+  span {
+    display: inline-block;
+    padding: 5px;
+    cursor: pointer;
+  }
+
+  input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    width: 200px;
+  }
+}
