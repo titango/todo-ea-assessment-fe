@@ -235,10 +235,14 @@ const TodoContainer = () => {
             <input
               type="text"
               placeholder="Add a todo..."
+              aria-label="add"
+              role="textbox"
               value={newTodo}
               onChange={handleNewTodoChange}
             />
-            <Button onClick={handleAddTodo}>Add</Button>
+            <Button onClick={handleAddTodo} ariaLabel="add">
+              Add
+            </Button>
           </div>
 
           <input
