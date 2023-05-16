@@ -5,7 +5,7 @@ import ConfirmationModal from "@/components/layout/modal/ConfirmationModal";
 const isShowModal = true;
 const onDeleteConfirm = jest.fn();
 const onDeleteCancel = jest.fn();
-describe("Confirmation Modal", () => {
+describe("Confirmation Modal tests", () => {
   beforeEach(() => {
     // Render the Counter component
     render(
