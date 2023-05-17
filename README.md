@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A todo app which was provided by EA in assessment test.
+A todo app on frontend which was provided by EA in assessment test.
 
 Netlify working app: https://lighthearted-quokka-e866ac.netlify.app/
 
