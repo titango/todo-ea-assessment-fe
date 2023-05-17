@@ -93,7 +93,7 @@ const TodoContainer = () => {
         isCompleted: false,
       };
       try {
-        const resp: ITodoTask = await addNewTask(data);
+        const resp: ITodoTask = await addNewTask(data as ITodoTask);
         console.log("resp: ", resp);
         if (resp && resp._id) {
           const cloneTodo = [...todos];
