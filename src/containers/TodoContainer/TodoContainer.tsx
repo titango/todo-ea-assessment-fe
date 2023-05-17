@@ -17,7 +17,7 @@ import {
 import ConfirmationModal from "@/components/layout/modal/ConfirmationModal";
 import Button from "@/components/main/Button/Button";
 import { useDebounce } from "@/helpers/useDebounce";
-import { extractTodoTasks } from "./helpers/task.filter";
+import { extractTodoTasks, showRecentTasks } from "./helpers/task.filter";
 import useSocketTaskUpdated from "@/helpers/useSocketTaskUpdated";
 
 const TodoContainer = () => {
@@ -278,7 +278,7 @@ const TodoContainer = () => {
             <div className={styles.column}>
               <TodoColumn
                 title="Done"
-                tasks={doneTodos.slice(0, 10)}
+                tasks={showRecentTasks(doneTodos, 10)}
                 onTaskDoneChecked={(event, task) => handleTaskDone(event, task)}
                 onEditText={onEditText}
               />
